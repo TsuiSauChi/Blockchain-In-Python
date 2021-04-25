@@ -4,8 +4,8 @@ import consensus.pow as consensus
 
 # Store Each MerkelTree Value in a Linked List
 class Blockchain:
-    def __init__(self):
-        self.difficulty = 5
+    def __init__(self, difficulty):
+        self.difficulty = difficulty
         self.head = None
         self.tail = None
 
@@ -49,8 +49,6 @@ class Blockchain:
     # Return the entire Linked List
     def getList(self):
         temp = self.head 
-        blockchain = list()
         while temp is not None:
-            blockchain.append(temp.key)
+            print(temp.key)
             temp = temp.next
-        return blockchain

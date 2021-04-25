@@ -1,42 +1,51 @@
 from blockchain import Blockchain
 from block import Block
 from mempool import Mempool
+from mempool import ValidateBlock
 from merkletree import MerkelTree
 
-import hashlib
+import hashlib, random
 
-newMerkel = MerkelTree()
-ll = Blockchain()
+# Set Initialization Variables 
+block_size = 120 
+difficulty = 4
 
-# First Block: is genesis block
-newList1 = Mempool()
-newList1.add('Genesis Block')
-newList1.sort()
-hash_value1 = newMerkel.createMerkelHash(newList1.getList())
+def main():
+    newMerkel = MerkelTree()
+    ll = Blockchain(difficulty)
 
-# Add genesis block into the blockchain
-ll.insert(hash_value1, 0)
+    # First Block: is genesis block
+    hash_value1 = newMerkel.createMerkelHash(['Genesis Block'])
+    # Add genesis block into the blockchain
+    ll.insert(hash_value1, 0)
 
-# Second Block
-newList2 = Mempool()
-newList2.add('1')
-newList2.add('2')
-hash_value2 = newMerkel.createMerkelHash(newList2.getList())
-
-nonceValue = ll.mine(hash_value2)
-ll.insert(hash_value2, nonceValue)
-
-# Third Block
-newList3 = Mempool()
-newList3.add('This is a Test')
-newList3.add('Hello World')
-hash_value3 = newMerkel.createMerkelHash(newList3.getList())
-
-nonceValue = ll.mine(hash_value3)
-ll.insert(hash_value3, nonceValue)
-
-print()
+    # Create Memory Pool with random values
+    pool = Mempool()
+    for i in range(100):
+        pool.add(random.randrange(1,100))
 
 
-blockchain = ll.getList()
-print(blockchain)
+    # Loop until memory pool is empty
+    while pool.isEmpty() is False:
+        # 1. Create an instance to validate block
+        validate_block = ValidateBlock()
+        # 2. Get a subset of memory block to validate
+        block = validate_block.curate(pool, block_size)
+        # 3. Run Markle tree on block to be validated
+        hash_value2 = newMerkel.createMerkelHash(block)
+        # 4. Mine Block using POS consensus
+        nonceValue = ll.mine(hash_value2)
+        # 5. Insert new block into the blockchain
+        ll.insert(hash_value2, nonceValue)
+        # 6. Update the memory pool
+        validate_block.updatepool(pool, block)
+        print("Pool:", pool.getPool())
+        print()
+
+    print()
+
+    print("Blockchain:")
+    ll.getList()
+
+if __name__ == "__main__":
+    main()
