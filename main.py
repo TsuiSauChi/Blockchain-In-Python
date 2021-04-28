@@ -3,6 +3,8 @@ from block import Block
 from mempool import Mempool
 from mempool import ValidateBlock
 from merkletree import MerkelTree
+from application.identity import Identity
+from application.transaction import Transaction
 
 import hashlib, random
 
@@ -19,10 +21,15 @@ def main():
     # Add genesis block into the blockchain
     ll.insert(hash_value1, 0)
 
+    # Create new identity
+    James = Identity()
+
     # Create Memory Pool with random values
     pool = Mempool()
     for i in range(100):
-        pool.add(random.randrange(1,100))
+        new_transaction = Transaction(James, random.randrange(1,100))
+        new_transaction.sign(James.getPrivateKey())
+        pool.add(new_transaction)
 
 
     # Loop until memory pool is empty

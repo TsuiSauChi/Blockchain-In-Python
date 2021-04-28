@@ -55,8 +55,14 @@ class ValidateBlock:
     def curate(self, pool, size):
         index = 0
         while (int(pool.getIndex() - index) != -1) and (sys.getsizeof(self.block) != size):
-            self.block.append(pool.get(index))
-            index += 1
+            # Verify Digital Signature of Transaction
+            if pool.get(index).verify():
+                self.block.append(pool.get(index))
+                index += 1
+            else:
+                print("Transaction", pool.get(index), "is not authentic")
+                print("Removing Transaction")
+                pool.delete(index)
         return self.block
     
     def updatepool(self, pool, block):
