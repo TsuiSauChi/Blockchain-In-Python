@@ -6,8 +6,6 @@ class Block:
         self.next = None 
         self.prev = None
         self.nonce = 0
-        self.height = Block.height
-        Block.height += 1
 
     def getKey(self):
         return self.key

@@ -8,6 +8,7 @@ class Blockchain:
         self.difficulty = difficulty
         self.head = None
         self.tail = None
+        self.height = 0
 
     # Insert block at the end of list
     def insert(self, key, nonceValue):
@@ -27,6 +28,7 @@ class Blockchain:
                     temp = temp.next
                 temp.next = block
                 block.prev = temp
+                self.height += 1
                 block.setKey(self.hash(block, nonceValue, False))
             else:
                 print("Nonce value is incorrect")
@@ -52,3 +54,6 @@ class Blockchain:
         while temp is not None:
             print(temp.key)
             temp = temp.next
+
+    def getHeight(self):
+        return self.height

@@ -8,9 +8,8 @@ def pow(key, difficulty):
     dif_list = [0] * difficulty
     dif_str = "".join(str(x) for x in dif_list)
 
-    block = Block(key)
     nonceValue = 0
-    hash_value = hashlib.sha256(str.encode(block.getKey() + str(nonceValue))).hexdigest()
+    hash_value = hashlib.sha256(str.encode(key + str(nonceValue))).hexdigest()
     check = list()
     for i in hash_value[:difficulty]:
         check.append(i)
@@ -18,7 +17,7 @@ def pow(key, difficulty):
     
     while dif_str != check_str:
         nonceValue += 1
-        hash_value = hashlib.sha256(str.encode(block.getKey() +  str(nonceValue))).hexdigest()
+        hash_value = hashlib.sha256(str.encode(key +  str(nonceValue))).hexdigest()
         check = list()
         for i in hash_value[:difficulty]:
             check.append(i)
