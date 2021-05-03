@@ -3,8 +3,8 @@ from block import Block
 from mempool import Mempool
 from mempool import ValidateBlock
 from merkletree import MerkelTree
-from application.identity import Identity
-from application.transaction import Transaction
+from wallet.identity import Identity
+from wallet.transaction import Transaction
 
 import hashlib, random
 import os, csv

@@ -31,7 +31,7 @@ class Client:
 
     def __init__(self):
         serverName = ""
-        serverPort = 10001
+        serverPort = 10000
         self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.clientSocket.connect((serverName, serverPort))
 
@@ -50,13 +50,12 @@ class Client:
 
 
     def broadcast_block(self, block):
-        print("Testing")
         self.clientSocket.send(str.encode("CAST"))
-        print("Testing123")
         # Need to change to block.prev.key 
         self.clientSocket.send(str.encode(block.prev))
         # Receive status code - whether new block is valid
         status = self.clientSocket.recv(3).decode()
+        print("Testing")
         if status == "200":
             print("Block is Valid")
             self.clientSocket.send(str.encode(block.key))
@@ -77,5 +76,8 @@ class Client:
 newClient = Client()
 newClient.reset()
 newClient.initalization()
+newClient.close()
+
+newClient = Client()
 newClient.broadcast_block(newBlock)
 newClient.close()
